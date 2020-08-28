@@ -6,7 +6,7 @@ To make use of the tool you can just clone the repository.
 
 ## User instructions
 
-The corresponding .cpp files need to included in a project, according to the needs of the user. The tool is to be compiled together with the code that makes use of it. The only important think to note is that higher dimension entities depend on the lower ones. So, if you want to use the *nurbsSur* class, *nurbsCur* needs to also be included.
+The corresponding .cpp files need to included in a project, according to the needs of the user. The tool is to be compiled together with the code that makes use of it and any compiler can be used for this purpose. The only important think to note is that higher dimension entities depend on the lower ones. So, if you want to use the *nurbsSur* class, *nurbsCur* needs to also be included.
 
 ## Example usage
 
