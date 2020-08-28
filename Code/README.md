@@ -64,3 +64,7 @@ The code has been extensively commented and will provide the information require
 ## Things to Note about Refinement
 
 Global refinement is rigorous and can properly accept any knots without breaking the spline. Local refinement is a different case however. One needs to be very carefull with which knots are to be added and where, else the spline will break. The paper from S-Splines provides guidelines and checks one can make to access whether or not a control point is refinement compatible.
+
+## Prototypes
+
+A Jupyter notebook was included in the documentation folder which contains all the prototyping done in this project. It serves mainly as a means to store all the algorithms that were not used in the final implementation. It is not formated properly or has any comments, so although one is encouraged to have a look at it, it is not advised.
