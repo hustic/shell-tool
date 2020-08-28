@@ -58,6 +58,9 @@ tspline->write_vtk("data.vtk");               // output to .vtk
 
 
 ```
+
+The code has been extensively commented and will provide the information required to use the tool effectively.
+
 ## Things to Note about Refinement
 
 Global refinement is rigorous and can properly accept any knots without breaking the spline. Local refinement is a different case however. One needs to be very carefull with which knots are to be added and where, else the spline will break. The paper from S-Splines provides guidelines and checks one can make to access whether or not a control point is refinement compatible.
