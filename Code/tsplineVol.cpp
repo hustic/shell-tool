@@ -493,6 +493,35 @@ void tsplineVol::evaluate(double stepu, double stepv, double steph) {
     this->out.reset(out);
 }
 
+void tsplineVol::write_csvMeta(string filename) {
+    ofstream file;
+
+    file.open(filename);
+
+    auto CP = this->getWCP();
+    auto indexes = this->getIndexes();
+    auto betas = this->getBetas();
+    auto locals = this->getKnots();
+
+    file << "x, y, z, anchorx, anchory, anchorz, beta, local knot" << endl;
+
+    for (int i = 0; i < CP.size(); i++) {
+        file << CP[i][0] << "," << CP[i][1] << "," << CP[i][2] << ",";
+        file << indexes[i][0] << "," << indexes[i][1] << "," << indexes[i][2] << ",";
+        file << betas[i] << ",";
+        for (int j = 0; j < locals[i].size()-1; j++) {
+            file << "[";
+            for (int k = 0; k < locals[i][j].size(); k++) {
+                file << locals[i][j][k] << " ";
+            }
+            file << "]";
+        }
+        file << "," << endl;
+        
+    }
+
+    file.close();
+}
 /* Export evaluated volume to vtk
 */
 void tsplineVol::write_vtk(string filename) 

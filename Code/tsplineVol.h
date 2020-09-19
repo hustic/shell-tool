@@ -86,6 +86,10 @@ public:
     /* Export evaluated volume to vtk
     */
     void write_vtk(string);
+
+    /* Export data to csv
+    */
+    void write_csvMeta(string);
 };
 
 /* Helper function for finding anchor index
