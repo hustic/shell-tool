@@ -157,7 +157,9 @@ void nurbsSur::evaluate(double stepu, double stepv)
             vector<double> S {0., 0., 0.};
 
             for (int l = 0; l <= du; l++) {
+
                 vector<double> temp {0., 0., 0., 0.};
+                
                 int vind = vspan-dv+l;
                 for (int k = 0; k <= dv; k++) {
                     for (int j = 0; j < points[0][0].size(); j++) {
@@ -170,8 +172,6 @@ void nurbsSur::evaluate(double stepu, double stepv)
                 }
                 
             }
-
-            
 
             for (int j = 0; j < points[0][0].size()-1; j++) {
                 S[j] = Sw[j]/Sw[3];

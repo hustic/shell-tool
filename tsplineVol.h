@@ -17,6 +17,7 @@ struct vertex {
     vector<double> P;
     vector<double> Pw;
     vector<vector<double>> knots;
+    int id;
 
     vertex *left = nullptr;
     vertex *right = nullptr;
@@ -32,10 +33,14 @@ class tsplineVol: public spline
 {
 public:
 
-    unique_ptr<vertex> *head;                // head of the vertexes linked structure
+    // unique_ptr<vertex> *head;                // head of the vertexes linked structure
     unique_ptr<vector<vector<double>>> Pw;  // weighted control points of the volume
     unique_ptr<vector<vector<double>>> P;   // control points of the volume
     unique_ptr<vector<vector<vector<double>>>> local_knots;   // t-mesh in V parametric direction
+
+    // unique_ptr<>;
+
+    // Pw[0] -> {V, U, H}
     unique_ptr<vector<vector<double>>>  indexes;   // vector of anchor indexes
     unique_ptr<vector<double>> betas;       // vector of betas
     int p;                                  // degree p
@@ -113,3 +118,7 @@ public:
 *  Output: Vector of anchor indexes
 */
 vector<double> findex(int n, int p);
+
+vector<double> cart2par(vector<double> cor);
+
+double BasisFun(double u, vector<double> U, int p);

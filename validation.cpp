@@ -64,8 +64,20 @@ int main()
 
     auto Ps = sphere->getCP();
 
+    auto test = cart2par(vector<double> {15., 17., 19.});
 
     auto* tspline = new tsplineVol(*shell);
+
+    tspline->evaluate(0.5, 0.5, 0.5);
+
+    auto he =tspline->getRes();
+
+    for (auto&hst : he) {
+        for (auto&h : hst) {
+        cout << h << endl;
+        }
+        cout << endl;
+    }
 
     
     delete tspline;

@@ -436,6 +436,8 @@ void tsplineVol::evaluate(double stepu, double stepv, double steph) {
     int du = this->q;
     int dr = this->r;
     
+    // vector<vector<vector<double>>>
+    // len(P)    3    degree + 2   
     auto kns = this->getKnots();
 
     auto betas = this->getBetas();
@@ -476,6 +478,9 @@ void tsplineVol::evaluate(double stepu, double stepv, double steph) {
     this->right = usteps.size();
     
     auto points = this->getWCP();
+
+    // vector<vector<double>>
+    // len(P)   3
     auto index = this->getIndexes();
 
 
@@ -487,9 +492,10 @@ void tsplineVol::evaluate(double stepu, double stepv, double steph) {
                 vector<double> S {0., 0., 0.};
 
                 for (int i = 0; i < points.size(); i++) {
-                    double Nip = oneBasisFun(floor(index[i][0]), ust, this->n, kns[i][0]);
-                    double Niq = oneBasisFun(floor(index[i][1]), vst, this->m, kns[i][1]);
-                    double Nir = oneBasisFun(floor(index[i][2]), hst, this->l, kns[i][2]);
+                    // oneBasisFun is problematic, pls fix
+                    double Nip = BasisFun(ust, kns[i][0], dv);
+                    double Niq = BasisFun(vst, kns[i][1], du);
+                    double Nir = BasisFun(hst, kns[i][2], dr);
 
                     for (int j = 0; j < points[0].size(); j++) {
                         Sw[j] += Nip * Niq * Nir * betas[i] * points[i][j];
@@ -647,5 +653,80 @@ void tsplineVol::write_vtk(string filename)
 
 
     file.close();
+
+}
+
+vector<double> cart2par(vector<double> cor) {
+    double r = sqrt(pow(cor[0], 2) + pow(cor[1], 2) + pow(cor[2], 2));
+    double phi = acos(cor[1]/r);
+    double theta = atan2(cor[1], cor[0]);
+
+    // cout<< phi << endl;
+    // cout << theta << endl;
+
+    double norm_phi = (phi * 180/M_PI) / 180;
+    double norm_theta = (theta * 180/M_PI) / 360;
+    double norm_r = r;
+
+    // cout<< norm_phi << endl;
+    // cout << norm_theta << endl;
+
+    return vector<double> {norm_r, norm_phi, norm_theta};
+}
+
+/* oneBasisFun Helper Function - NURBS Book A2.4
+** Returns the value N_ip
+** Input: span index i, degree p, parameter space value u, knot vector U
+** Output: N_ip
+*/
+double BasisFun(double u, vector<double> U, int p) {
+    double Nip;
+
+    if (u < U[0] || u >= U[p+1]) {
+        Nip = 0.;
+        cout << "here!" << endl;
+        return Nip;
+    }
+    
+    vector<double> N(p+1);
+
+    for (int i = 0; i <= p; i++) {
+        if (u >= U[i] && u < U[i+1]) {
+            N[i] = 1.;
+        } else {
+            N[i] = 0.;
+        }
+    }
+    double saved;
+    double Uleft;
+    double Uright;
+    double temp;
+    for (int i = 1; i <= p+1; i++) {
+        if (N[0] == 0.0) {
+            saved = 0.0;
+        } else {
+            saved = ((u-U[0])*N[0])/(U[i]-U[0]);
+        }
+
+        for (int j = 0; j <= p-i; j++) {
+            Uleft = U[j+1];
+            Uright = U[j+i+1];
+
+            if (N[j+1] == 0.0) {
+                N[j] = saved;
+                saved = 0.0;
+            } else {
+                temp = N[j+1]/(Uright - Uleft);
+                N[j] = saved + (Uright-u)*temp;
+                saved = (u - Uleft) * temp;
+            }
+        }
+    }
+
+    Nip = N[0];
+
+    // cout << Nip << endl;
+
+    return Nip;
 
 }

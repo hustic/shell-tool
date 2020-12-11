@@ -30,6 +30,11 @@ nurbsCur::nurbsCur(vector<vector<double>> *P, vector<double> *U, int p)
 nurbsCur::~nurbsCur()
 {}
 
+
+// c = nurbsCur(o, x, y, start, end);
+// c->makePw();
+// c->evaluate();
+
 /* Evaluate curve given a step to go from 0 to 1
     ** Output: populate out object
     */
@@ -42,6 +47,8 @@ void nurbsCur::evaluate(double step)
 
     int degree = this->p;
     vector<double> knot = this->getKnot();
+    // points always need to be weighted control points
+    // points = { wx, wy, wz, w}
     vector<vector<double>> points = this->getCP();
 
     while (start <= end) {
@@ -55,8 +62,8 @@ void nurbsCur::evaluate(double step)
             for (int j = 0; j < points[0].size(); j++) {
                 Cw[j] = Cw[j] + Nu[i] * points[uspan-degree+i][j];
             }
+            // Cw = Cw + Nu * points[uspan-degree+i]
         }
-
         
         for (int j = 0; j < points[0].size()-1; j++) {
             C[j] = Cw[j]/Cw[3];
@@ -154,7 +161,7 @@ nurbsCur::nurbsCur(vector<int>& O, vector<int>& X, vector<int>& Y, double r, dou
 
     vector<vector<double>> *Pw = new vector<vector<double>>();
     double w1 = cos(dtheta/2. * M_PI/180.);
-
+    // {1, w1, 1, w1, 1} 
     vector<double> P0;
     vector<double> T0;
 
@@ -181,7 +188,9 @@ nurbsCur::nurbsCur(vector<int>& O, vector<int>& X, vector<int>& Y, double r, dou
             P2.push_back(O[d] + r * cos(angle*M_PI/180.)*X[d] + r * sin(angle*M_PI/180.)*Y[d]);
             T2.push_back(-sin(angle*M_PI/180.)*X[d] + cos(angle*M_PI/180.)*Y[d]);
         }
-
+        // {1, 0, 0}
+        // {0, 1, 0}
+        // {0, 0, 1}
         vector<double> P1;
         if (X[0] == 1){
             vector<double> p0 {P0[0], P0[1]};
@@ -196,7 +205,7 @@ nurbsCur::nurbsCur(vector<int>& O, vector<int>& X, vector<int>& Y, double r, dou
             P1.push_back(0.);
         }
 
-        if (X[2] == 1){
+        if (X[2] == 1) {
             vector<double> p0 {P0[0], P0[2]};
             vector<double> t0 {T0[0], T0[2]};
             vector<double> p2 {P2[0], P2[2]};

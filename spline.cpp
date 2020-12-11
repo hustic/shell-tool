@@ -56,6 +56,14 @@ vector<double> getIntersect(vector<double> p0, vector<double> t0, vector<double>
     return out;
 }
 
+// 0, 0, 0, 0.5, 0.5, 1, 1, 1
+// u = 0
+// index = 0
+
+// u = 0.25
+// index = 1
+
+
 /* fspan Helper Function - NURBS Book Algorithm A2.1
 ** Calculates the index of the span where a control point is located
 ** Input: degree p, parameter space value u, knot vector U
@@ -86,6 +94,10 @@ int fspan(int p, double u, vector<double> U)
 
     return mid;
 }
+
+// physical space {x, y, z}
+// parameter space {theta, phi, r}
+// index space {}
 
 /* oneBasisFun Helper Function - NURBS Book A2.4
 ** Returns the value N_ip
